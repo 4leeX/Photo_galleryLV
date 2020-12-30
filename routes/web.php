@@ -18,3 +18,7 @@ Route::get('/albums', 'App\Http\Controllers\AlbumsController@index');
 Route::get('/albums/create', 'App\Http\Controllers\AlbumsController@create')->name('album-create');
 Route::post('/albums/store', 'App\Http\Controllers\AlbumsController@store')->name('album-store');
 Route::get('/albums/{id}', 'App\Http\Controllers\AlbumsController@show')->name('album-show');
+
+
+Route::get('/photos/create/{albumId}', 'App\Http\Controllers\PhotosController@create')->name('photo-create');
+Route::post('/photos/store', 'App\Http\Controllers\PhotosController@store')->name('photo-store');
