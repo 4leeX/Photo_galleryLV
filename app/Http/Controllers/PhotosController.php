@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Album;
 use App\Models\Photo;
 use Illuminate\Http\Request;
 
@@ -13,30 +14,41 @@ class PhotosController extends Controller
 
     public function store(Request $request){
         $this->validate($request, [
-            'name' => 'required',
+            'title' => 'required',
             'description' => 'required',
-            'cover-image' => 'required|image'
+            'photo' => 'required|image'
         ]);
 
 
 
-        $filenemeWithExtension = $request->file('cover-image')->getClientOriginalName();
+        $filenemeWithExtension = $request->file('photo')->getClientOriginalName();
 
         $filename = pathinfo($filenemeWithExtension, PATHINFO_FILENAME);
 
-        $extension = $request->file('cover-image')->getClientOriginalExtension();
+        $extension = $request->file('photo')->getClientOriginalExtension();
 
         $filenameToStore = $filename . '_' . time() . '.' . $extension;
 
-        $request->file('cover-image')->storeAs('public/album_covers', $filenameToStore);
+        $request->file('photo')->storeAs('public/albums/' . $request->input('album-id'), $filenameToStore);
 
 
-        $album = new Photo();
-        $album->name = $request->input('name');
-        $album->description = $request->input('description');
-        $album->cover_image = $filenameToStore;
-        $album->save();
+        $photo = new Photo();
+        $photo->title = $request->input('title');
+        $photo->description = $request->input('description');
+        $photo->photo = $filenameToStore;
+        $photo->size = $request->file('photo')->getSize();
+        $photo->album_id = $request->input('album-id');
+        $photo->save();
 
-        return redirect('/albums')->with('success', 'Album created successfully!');
+        return redirect('/albums/' . $request->input('album-id'))->with('success', 'Photo uploaded successfully!');
     }
+
+    public function show($id){
+        $photo = Photo::find($id);
+
+        return view('photos.show')->with('photo', $photo);
+    }
+
+
+
 }
