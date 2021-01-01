@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Album;
 use App\Models\Photo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PhotosController extends Controller
 {
@@ -49,6 +50,12 @@ class PhotosController extends Controller
         return view('photos.show')->with('photo', $photo);
     }
 
+
+    public function destroy($id){
+        $photo = Photo::find($id);
+
+        dd(Storage::delete('storage/albums/' . $photo->album_id . '/' . $photo->photo));
+    }
 
 
 }
