@@ -5,11 +5,13 @@
     <div class="container">
       <h3>{{ $photo->title }}</h3>
       <p>{{ $photo->description }}</p>
-      <form action="{{ route('photo-destroy', 'photo->id') }}" method="post">
+      
+      <form action="{{ route('photo-destroy', '$photo->id') }}" method="post">
           @csrf
           @method('DELETE')
           <button type="submit" name="button" class="btn btn-danger float-left mr-3">DELETE</button>
       </form>
+
       <a href="{{ route('album-show', $photo->album->id) }}" class="btn btn-info">Go Back</a>
       <small>Size: {{ $photo->size }}</small>
       <hr>
